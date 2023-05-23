@@ -1,37 +1,35 @@
-import uvicorn
-from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import FastAPI, Depends, HTTPException
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-
 import models.models
-from models.models import User, Group
 import jwt
+
 
 app = FastAPI()
 security = HTTPBearer()
 
 # Конфигурация
-SECRET_KEY = "mysecretkey"
-ALGORITHM = "HS256"
+ALGORITHM = 'HS256'
+SECRET_KEY = 'mysecretkey'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Хранение пользователей (для примера)
 # ебаная бд
 users = [
-    {"login": "alice", "password": "$2b$12$p/ZyDeo2ve7MSozJLxQpRuOUWVTs8vsBgufu5mIaa6cyvOhGLO0YO"},
-    {"login": "bob", "password": "$2b$12$q2brtEo0GQJ8UxAs8J/UNutck7gRQ29q6ehh2y3h29.N5L5EvoAAW"}
+    {'login': 'alice', 'password': '$2b$12$p/ZyDeo2ve7MSozJLxQpRuOUWVTs8vsBgufu5mIaa6cyvOhGLO0YO'},
+    {'login': 'bob', 'password': '$2b$12$q2brtEo0GQJ8UxAs8J/UNutck7gRQ29q6ehh2y3h29.N5L5EvoAAW'}
 ]
 
 # Хеширование пароля
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
 # Генерация токена доступа
 def create_access_token(data: dict, expires_delta: timedelta):
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
-    to_encode.update({"exp": expire})
+    to_encode.update({'exp': expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
@@ -40,14 +38,16 @@ def create_access_token(data: dict, expires_delta: timedelta):
 def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        login = payload.get("sub")
+        login = payload.get('sub')
+
         if login is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
+            raise HTTPException(status_code=401, detail='Invalid token')
+
         return login
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token has expired")
+        raise HTTPException(status_code=401, detail='Token has expired')
     except jwt.JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(status_code=401, detail='Invalid token')
 
 
 # Получение хеша пароля
@@ -75,28 +75,28 @@ def authenticate_user(login: str, password: str):
 
 
 # Роуты
-@app.post("/register")
+@app.post('/register')
 def register(login: str, password: str, gender: str, born_at: str, street: str):
     register_user(login, password, gender, born_at, street)
-    return {"message": "User registered successfully"}
+    return {'message': 'User registered successfully'}
 
 
-@app.post("/login")
+@app.post('/login')
 def login(credentials: HTTPAuthorizationCredentials = Depends(security)):
     login = credentials.login
     password = credentials.password
 
     user = authenticate_user(login, password)
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid login or password")
+        raise HTTPException(status_code=401, detail='Invalid login or password')
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token({"sub": user.login}, access_token_expires)
+    access_token = create_access_token({'sub': user.login}, access_token_expires)
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {'access_token': access_token, 'token_type': 'bearer'}
 
 
-@app.get("/protected")
+@app.get('/protected')
 def protected_route(token: str = Depends(security)):
     login = verify_token(token)
-    return {"message": f"Hello, {login}!"}
+    return {'message': f'Hello, {login}!'}
