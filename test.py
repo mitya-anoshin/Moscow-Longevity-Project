@@ -1,8 +1,7 @@
 from database import SessionLocal
-from models.models import User
-import time
+from models import User
 
-user = User(2424, "asdfasf", "asdfasf", 234234, "asdhfasf")
+user = User("asfasfasf", "asdfasf", "asdfasf", 1421412, "asdhfasf")
 session = SessionLocal()
 session.add(user)
 session.commit()

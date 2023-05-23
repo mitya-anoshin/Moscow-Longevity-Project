@@ -3,9 +3,10 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import HTTPBearer
 from datetime import date, datetime, timedelta
 from pydantic import BaseModel
+from tokens import ACCESS_TOKEN_EXPIRE_MINUTES
 from database import SessionLocal
-import models
-import uuid
+from models import User
+from uuid import UUID
 import jwt
 
 
@@ -20,27 +21,25 @@ users = [
 ]
 
 # Create instance
-class User(BaseModel):
-    id: uuid
-    registered_at: str
-    login: str
-    password: str
-    gender: str
-    born_at: date
-    street: str
-
-
-person = User()
+# class User(BaseModel):
+#     id: UUID
+#     registered_at: str
+#     login: str
+#     password: str
+#     gender: str
+#     born_at: date
+#     street: str
+#
+#
+#person = User(123123, "adsfasf", "adsfasf", "adsfasf","adsfasf",223423, "adsfasf")
 session = SessionLocal()
 
 
 
 @app.post('/register')
-def register(login: str, password: str, gender: str, born_at: date, street: str):
-    user = models.models.User(login=login, password=password, gender=gender, born_at=born_at, street=street)
-    # users.append(user)  # TODO: исправить пользователя на бд где лежат
-    session.add(user)
-    session.commit()
+def register(login: str, password: str, gender: str, born_at: int, street: str):
+    user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
+    users.append(user)  # TODO: исправить пользователя на бд где лежат
     return {'message': 'User registered successfully'}
 
 
