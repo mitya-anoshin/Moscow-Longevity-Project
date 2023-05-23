@@ -7,10 +7,12 @@ from tokens import ACCESS_TOKEN_EXPIRE_MINUTES
 from database import SessionLocal
 from models import User
 from uuid import UUID
+import uvicorn
+
 import jwt
-
-
 app = FastAPI()
+
+
 security = HTTPBearer()
 
 
@@ -33,22 +35,29 @@ users = [
 #
 #person = User(123123, "adsfasf", "adsfasf", "adsfasf","adsfasf",223423, "adsfasf")
 session = SessionLocal()
-
+results = session.query(User).all()
 
 
 @app.post('/register')
 def register(login: str, password: str, gender: str, born_at: int, street: str):
     user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
-    users.append(user)  # TODO: исправить пользователя на бд где лежат
+    session.add(user)
+    session.commit()
+
     return {'message': 'User registered successfully'}
 
 
 @app.post('/login')
 def login(login: str, password: str):
 
-    for some_user in users:
+    # for some_user in results:
+    #     if some_user.login == login and some_user.verify_password(password):
+    #         user = some_user # TODO: исправить пользователя на бд где лежат
+    #         break
+
+    for some_user in results:
         if some_user.login == login and some_user.verify_password(password):
-            user = some_user # TODO: исправить пользователя на бд где лежат
+            user = some_user
             break
 
     if not user:
@@ -64,3 +73,7 @@ def login(login: str, password: str):
 def protected_route(token: str = Depends(security)):
     login = verify_token(token)
     return {'message': f'Hello, {login}!'}
+
+
+# if __name__ == "main":
+#     uvicorn.run('main:app', host="127.0.0.1", reload=True, port=8000)
