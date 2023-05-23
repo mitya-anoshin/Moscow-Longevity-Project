@@ -49,15 +49,6 @@ def verify_token(token: str):
         raise HTTPException(status_code=401, detail='Invalid token')
 
 
-def register_user(login: str, password: str, gender: str, born_at: str, street: str):
-    """
-    User registration.
-    """
-
-    user = models.models.User(login=login, password=password, gender=gender, born_at=born_at, street=street)
-    users.append(user)  # TODO: исправить пользователя на бд где лежат
-
-
 def authenticate_user(login: str, password: str):
     """
     User authorization.
@@ -70,7 +61,9 @@ def authenticate_user(login: str, password: str):
 
 @app.post('/register')
 def register(login: str, password: str, gender: str, born_at: str, street: str):
-    register_user(login, password, gender, born_at, street)
+    user = models.models.User(login=login, password=password, gender=gender, born_at=born_at, street=street)
+    users.append(user)  # TODO: исправить пользователя на бд где лежат
+
     return {'message': 'User registered successfully'}
 
 
