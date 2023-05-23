@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_button.dart';
 
+/// CodeConfirmationPage widget
 class CodeConfirmationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class CodeConfirmationPage extends StatelessWidget {
             ),
             SizedBox(height: 40.h),
             AppButton(
-              type: ButtonType.PLAIN,
+              type: ButtonType.plain,
               onPressed: () {},
               text: 'Подтвердить',
             ),

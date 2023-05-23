@@ -5,6 +5,7 @@ import '../../../utils/constants.dart';
 import '../../../utils/helper.dart';
 import '../../../widgets/app_button.dart';
 
+/// PhoneLoginPage widget
 class PhoneLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class PhoneLoginPage extends StatelessWidget {
             ),
             SizedBox(height: 40.h),
             AppButton(
-              type: ButtonType.PLAIN,
+              type: ButtonType.plain,
               onPressed: () {
                 nextScreen(context, "/login/phone/confirm_code");
               },

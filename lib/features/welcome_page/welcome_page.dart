@@ -5,6 +5,7 @@ import '../../utils/constants.dart';
 import '../../utils/helper.dart';
 import '../../widgets/app_button.dart';
 
+/// WelcomePage Widget
 class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -40,11 +41,12 @@ class WelcomePage extends StatelessWidget {
                   children: [
                     Text(
                       "Приветствуем вас в Московском долголетии!",
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Color.fromRGBO(19, 22, 33, 1),
-                            fontSize: 27.sp,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: Color.fromRGBO(19, 22, 33, 1),
+                                fontSize: 27.sp,
+                              ),
                     ),
                     SizedBox(
                       height: 15.h,
@@ -61,7 +63,7 @@ class WelcomePage extends StatelessWidget {
                     ),
                     AppButton(
                       text: "Да",
-                      type: ButtonType.PLAIN,
+                      type: ButtonType.plain,
                       onPressed: () {
                         nextScreen(context, "/login");
                       },
@@ -71,7 +73,7 @@ class WelcomePage extends StatelessWidget {
                     ),
                     AppButton(
                       text: "Нет",
-                      type: ButtonType.PRIMARY,
+                      type: ButtonType.plain,
                       onPressed: () {
                         nextScreen(context, "/login");
                       },

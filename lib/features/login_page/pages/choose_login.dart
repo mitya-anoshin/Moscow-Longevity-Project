@@ -6,6 +6,7 @@ import '../../../utils/constants.dart';
 import '../../../utils/helper.dart';
 import '../../../widgets/app_button.dart';
 
+/// ChooseLoginPage widget
 class ChooseLoginPage extends StatelessWidget {
   _launchURL() async {
     final url = Uri.parse('https://www.mos.ru');
@@ -50,11 +51,12 @@ class ChooseLoginPage extends StatelessWidget {
                     ),
                     Text(
                       "Выберите как вы хотите войти",
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontSize: 40.sp,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize: 40.sp,
+                              ),
                     )
                   ],
                 ),
@@ -81,7 +83,7 @@ class ChooseLoginPage extends StatelessWidget {
                     children: [
                       AppButton(
                         text: "По номеру телефона",
-                        type: ButtonType.PRIMARY,
+                        type: ButtonType.primary,
                         onPressed: () {
                           nextScreen(context, "/login/phone");
                         },
@@ -89,7 +91,7 @@ class ChooseLoginPage extends StatelessWidget {
                       SizedBox(height: 50.h),
                       AppButton(
                         text: "По email",
-                        type: ButtonType.PRIMARY,
+                        type: ButtonType.primary,
                         onPressed: () {
                           nextScreen(context, "/login/email");
                         },
@@ -97,7 +99,7 @@ class ChooseLoginPage extends StatelessWidget {
                       SizedBox(height: 50.h),
                       AppButton(
                         text: "По Mos.ru",
-                        type: ButtonType.PRIMARY,
+                        type: ButtonType.primary,
                         onPressed: _launchURL,
                       ),
                     ],

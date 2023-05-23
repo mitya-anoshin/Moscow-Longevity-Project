@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_button.dart';
 
+/// EmailLoginPage widget
 class EmailLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class EmailLoginPage extends StatelessWidget {
             SizedBox(height: 100.h),
             AppButton(
               text: "Далее",
-              type: ButtonType.PLAIN,
+              type: ButtonType.plain,
               onPressed: () {
                 // nextScreen(context, "/login");
               },

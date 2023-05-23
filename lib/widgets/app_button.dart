@@ -4,13 +4,27 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/constants.dart';
 
-enum ButtonType { PRIMARY, PLAIN }
+/// ButtonType enum
+enum ButtonType {
+  /// Primary button design
+  primary,
 
+  /// Plain button design
+  plain,
+}
+
+/// AppButton widget
 class AppButton extends StatelessWidget {
+  /// AppButton type (ButtonType enum)
   final ButtonType type;
+
+  /// onPressed function
   final VoidCallback onPressed;
+
+  /// Button text
   final String text;
 
+  /// AppButton constructor
   AppButton({
     required this.type,
     required this.onPressed,
@@ -20,7 +34,7 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: this.onPressed,
+      onTap: onPressed,
       child: Container(
         width: double.infinity,
         height: 60.h,
@@ -51,22 +65,24 @@ class AppButton extends StatelessWidget {
   }
 }
 
+/// Get button color by type (ButtonType enum)
 Color getButtonColor(ButtonType type) {
   switch (type) {
-    case ButtonType.PRIMARY:
+    case ButtonType.primary:
       return Constants.primaryColor;
-    case ButtonType.PLAIN:
+    case ButtonType.plain:
       return Colors.white;
     default:
       return Constants.primaryColor;
   }
 }
 
+/// Get button text color by type (ButtonType enum)
 Color getTextColor(ButtonType type) {
   switch (type) {
-    case ButtonType.PLAIN:
+    case ButtonType.plain:
       return Constants.primaryColor;
-    case ButtonType.PRIMARY:
+    case ButtonType.primary:
       return Colors.white;
     default:
       return Colors.white;
