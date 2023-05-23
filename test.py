@@ -1,10 +1,10 @@
 from database import SessionLocal
 from models import User
 
-user = User("asfasfasf", "asdfasf", "asdfasf", 1421412, "asdhfasf")
-session = SessionLocal()
-# session.add(user)
-# session.commit()
 
-results = session.query(User).all()
-print(results)
+user = User('admin', '1234', 'male', 12345678, 'moscow')
+session = SessionLocal()
+session.add(user)
+session.commit()
+
+print(session.query(User).all())

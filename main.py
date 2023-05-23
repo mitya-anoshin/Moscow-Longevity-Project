@@ -1,26 +1,16 @@
 from tokens import create_access_token, verify_token
 from fastapi import FastAPI, Depends, HTTPException
-from fastapi.security import HTTPBearer
-from datetime import date, datetime, timedelta
-from pydantic import BaseModel
 from tokens import ACCESS_TOKEN_EXPIRE_MINUTES
+from fastapi.security import HTTPBearer
 from database import SessionLocal
+from datetime import timedelta
 from models import User
-from uuid import UUID
 import uvicorn
 
-import jwt
+
 app = FastAPI()
-
-
 security = HTTPBearer()
 
-
-# Users database
-users = [
-    {'login': 'alice', 'password': '$2b$12$p/ZyDeo2ve7MSozJLxQpRuOUWVTs8vsBgufu5mIaa6cyvOhGLO0YO'},
-    {'login': 'bob', 'password': '$2b$12$q2brtEo0GQJ8UxAs8J/UNutck7gRQ29q6ehh2y3h29.N5L5EvoAAW'}
-]
 
 # Create instance
 # class User(BaseModel):
@@ -31,9 +21,6 @@ users = [
 #     gender: str
 #     born_at: date
 #     street: str
-#
-#
-#person = User(123123, "adsfasf", "adsfasf", "adsfasf","adsfasf",223423, "adsfasf")
 session = SessionLocal()
 
 
@@ -70,9 +57,10 @@ def protected_route(token: str = Depends(security)):
     login = verify_token(token)
     return {'message': f'Hello, {login}!'}
 
+
 async def main():
-    await uvicorn.run(app, host="127.0.0.1", port=8000, debug=True)
+    await uvicorn.run(app, host='127.0.0.1', port=8000)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

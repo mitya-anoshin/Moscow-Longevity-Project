@@ -1,6 +1,5 @@
 from database import Base, engine
-from models import User
 
-print("create database ....")
 
+print('Create database...')
 Base.metadata.create_all(engine)

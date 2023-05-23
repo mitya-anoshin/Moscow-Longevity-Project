@@ -1,7 +1,7 @@
-from sqlalchemy import Column, String, DateTime, TIMESTAMP, Integer
+from sqlalchemy import Column, String, Integer
 from passlib.context import CryptContext
-from database import Base
 from datetime import datetime
+from database import Base
 import uuid
 
 
@@ -12,14 +12,16 @@ pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 def generate_uuid():
     return str(uuid.uuid4())
 
-def timestamp():
+
+def get_timestamp():
     return int(datetime.now().timestamp())
+
 
 class User(Base):
     __tablename__ = 'users'
 
     id = Column(String, primary_key=True, default=generate_uuid)
-    registered_at = Column(Integer, nullable=False, default=timestamp)
+    registered_at = Column(Integer, nullable=False, default=get_timestamp)
 
     login = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
