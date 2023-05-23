@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^4.0.4
   intl: ^0.18.1
   url_launcher: ^6.1.11
+  magnifying_glass: ^1.0.4
 
 dev_dependencies:
   flutter_test:
