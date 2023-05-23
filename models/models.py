@@ -1,6 +1,11 @@
 from sqlalchemy import Column, String, DateTime
+from passlib.context import CryptContext
 from database import Base
 import uuid
+
+
+# Crypto context for hashing
+pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
 def generate_uuid():
@@ -19,12 +24,15 @@ class User(Base):
     born_at = Column(DateTime, nullable=False)  # TODO: дататайм не робит
     street = Column(String, nullable=False)
 
-    def __init__(self, login: str, hashed_password: str, gender: str, born_at: str, street: str):
+    def __init__(self, login: str, password: str, gender: str, born_at: str, street: str):
         self.login = login
-        self.hashed_password = hashed_password
+        self.hashed_password = pwd_context.hash(password)
         self.gender = gender
         self.born_at = born_at
         self.street = street
+
+    def verify_password(self, plain_password: str):
+        return pwd_context.verify(plain_password, self.hashed_password)
 
     def dict(self):
         return {

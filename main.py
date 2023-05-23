@@ -1,6 +1,5 @@
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import FastAPI, Depends, HTTPException
-from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import models.models
 import jwt
@@ -9,32 +8,33 @@ import jwt
 app = FastAPI()
 security = HTTPBearer()
 
-# Конфигурация
+# Configuration
 ALGORITHM = 'HS256'
-SECRET_KEY = 'mysecretkey'
+SECRET_KEY = 'my_secret_key'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-# Хранение пользователей (для примера)
+# Users database
 users = [
     {'login': 'alice', 'password': '$2b$12$p/ZyDeo2ve7MSozJLxQpRuOUWVTs8vsBgufu5mIaa6cyvOhGLO0YO'},
     {'login': 'bob', 'password': '$2b$12$q2brtEo0GQJ8UxAs8J/UNutck7gRQ29q6ehh2y3h29.N5L5EvoAAW'}
 ]
 
-# Хеширование пароля
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
-
-# Генерация токена доступа
 def create_access_token(data: dict, expires_delta: timedelta):
+    """
+    Creates access token for user.
+    """
+
     to_encode = data.copy()
-    expire = datetime.utcnow() + expires_delta
-    to_encode.update({'exp': expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    to_encode.update({'exp': datetime.utcnow() + expires_delta})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
-# Верификация токена доступа
 def verify_token(token: str):
+    """
+    Verifies access token.
+    """
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         login = payload.get('sub')
@@ -49,31 +49,25 @@ def verify_token(token: str):
         raise HTTPException(status_code=401, detail='Invalid token')
 
 
-# Получение хеша пароля
-def get_hashed_password(password: str):
-    return pwd_context.hash(password)
-
-
-# Проверка хеша пароля
-def verify_password(plain_password: str, hashed_password: str):
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-# Регистрация пользователя
 def register_user(login: str, password: str, gender: str, born_at: str, street: str):
-    hashed_password = get_hashed_password(password)
-    user = models.models.User(login=login, hashed_password=hashed_password, gender=gender, born_at=born_at, street=street)
+    """
+    User registration.
+    """
+
+    user = models.models.User(login=login, password=password, gender=gender, born_at=born_at, street=street)
     users.append(user)  # TODO: исправить пользователя на бд где лежат
 
 
-# Авторизация пользователя
 def authenticate_user(login: str, password: str):
+    """
+    User authorization.
+    """
+
     for user in users:
-        if user.login == login and verify_password(password, user.hashed_password):
+        if user.login == login and user.verify_password(password):
             return user  # TODO: исправить пользователя на бд где лежат
 
 
-# Роуты
 @app.post('/register')
 def register(login: str, password: str, gender: str, born_at: str, street: str):
     register_user(login, password, gender, born_at, street)
