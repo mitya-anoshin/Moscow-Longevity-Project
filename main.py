@@ -75,11 +75,9 @@ def register(login: str, password: str, gender: str, born_at: str, street: str):
 
 
 @app.post('/login')
-def login(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    login = credentials.login
-    password = credentials.password
-
+def login(login: str, password: str):
     user = authenticate_user(login, password)
+
     if not user:
         raise HTTPException(status_code=401, detail='Invalid login or password')
 
