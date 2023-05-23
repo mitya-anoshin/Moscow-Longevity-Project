@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, DateTime, TIMESTAMP
 from passlib.context import CryptContext
 from database import Base
 import uuid
@@ -13,15 +13,15 @@ def generate_uuid():
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
     id = Column(String, primary_key=True, default=generate_uuid)
-    registered_at = Column(DateTime, nullable=False)
+    registered_at = Column(TIMESTAMP, nullable=False)
 
     login = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
     gender = Column(String, nullable=False)
-    born_at = Column(DateTime, nullable=False)  # TODO: дататайм не робит
+    born_at = Column(TIMESTAMP, nullable=False)  # TODO: дататайм не робит
     street = Column(String, nullable=False)
 
     def __init__(self, login: str, password: str, gender: str, born_at: str, street: str):
@@ -47,7 +47,7 @@ class User(Base):
 
 
 class Group(Base):
-    __tablename__ = 'group'
+    __tablename__ = 'groups'
 
     id = Column(String, primary_key=True, default=generate_uuid)
 

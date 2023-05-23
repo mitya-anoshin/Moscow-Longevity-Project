@@ -1,8 +1,13 @@
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import FastAPI, Depends, HTTPException
 from datetime import datetime, timedelta
+from pydantic import BaseModel
+from datetime import date
+from database import SessionLocal
 import models.models
+import uuid
 import jwt
+
 
 
 app = FastAPI()
@@ -18,6 +23,21 @@ users = [
     {'login': 'alice', 'password': '$2b$12$p/ZyDeo2ve7MSozJLxQpRuOUWVTs8vsBgufu5mIaa6cyvOhGLO0YO'},
     {'login': 'bob', 'password': '$2b$12$q2brtEo0GQJ8UxAs8J/UNutck7gRQ29q6ehh2y3h29.N5L5EvoAAW'}
 ]
+
+# Create instance
+class User(BaseModel):
+    id: uuid
+    registered_at: str
+    login: str
+    password: str
+    gender: str
+    born_at: date
+    street: str
+
+
+person = User()
+session = SessionLocal()
+
 
 
 def create_access_token(data: dict, expires_delta: timedelta):
@@ -60,10 +80,11 @@ def authenticate_user(login: str, password: str):
 
 
 @app.post('/register')
-def register(login: str, password: str, gender: str, born_at: str, street: str):
+def register(login: str, password: str, gender: str, born_at: date, street: str):
     user = models.models.User(login=login, password=password, gender=gender, born_at=born_at, street=street)
-    users.append(user)  # TODO: исправить пользователя на бд где лежат
-
+    # users.append(user)  # TODO: исправить пользователя на бд где лежат
+    session.add(user)
+    session.commit()
     return {'message': 'User registered successfully'}
 
 
