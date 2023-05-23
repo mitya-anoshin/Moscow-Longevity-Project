@@ -1,7 +1,7 @@
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPBearer
 from fastapi import FastAPI, Depends, HTTPException
 from datetime import datetime, timedelta
-import models.models
+import models
 import jwt
 
 
@@ -49,19 +49,9 @@ def verify_token(token: str):
         raise HTTPException(status_code=401, detail='Invalid token')
 
 
-def authenticate_user(login: str, password: str):
-    """
-    User authorization.
-    """
-
-    for user in users:
-        if user.login == login and user.verify_password(password):
-            return user  # TODO: исправить пользователя на бд где лежат
-
-
 @app.post('/register')
 def register(login: str, password: str, gender: str, born_at: str, street: str):
-    user = models.models.User(login=login, password=password, gender=gender, born_at=born_at, street=street)
+    user = models.User(login=login, password=password, gender=gender, born_at=born_at, street=street)
     users.append(user)  # TODO: исправить пользователя на бд где лежат
 
     return {'message': 'User registered successfully'}
@@ -69,7 +59,11 @@ def register(login: str, password: str, gender: str, born_at: str, street: str):
 
 @app.post('/login')
 def login(login: str, password: str):
-    user = authenticate_user(login, password)
+
+    for some_user in users:
+        if some_user.login == login and some_user.verify_password(password):
+            user = some_user # TODO: исправить пользователя на бд где лежат
+            break
 
     if not user:
         raise HTTPException(status_code=401, detail='Invalid login or password')
