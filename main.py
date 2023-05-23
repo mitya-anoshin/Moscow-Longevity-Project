@@ -15,7 +15,6 @@ SECRET_KEY = 'mysecretkey'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Хранение пользователей (для примера)
-# ебаная бд
 users = [
     {'login': 'alice', 'password': '$2b$12$p/ZyDeo2ve7MSozJLxQpRuOUWVTs8vsBgufu5mIaa6cyvOhGLO0YO'},
     {'login': 'bob', 'password': '$2b$12$q2brtEo0GQJ8UxAs8J/UNutck7gRQ29q6ehh2y3h29.N5L5EvoAAW'}
