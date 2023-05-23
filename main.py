@@ -25,7 +25,7 @@ users = [
 # Create instance
 # class User(BaseModel):
 #     id: UUID
-#     registered_at: str
+#     registered_at: strF
 #     login: str
 #     password: str
 #     gender: str
@@ -35,7 +35,6 @@ users = [
 #
 #person = User(123123, "adsfasf", "adsfasf", "adsfasf","adsfasf",223423, "adsfasf")
 session = SessionLocal()
-results = session.query(User).all()
 
 
 @app.post('/register')
@@ -50,10 +49,7 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
 @app.post('/login')
 def login(login: str, password: str):
 
-    # for some_user in results:
-    #     if some_user.login == login and some_user.verify_password(password):
-    #         user = some_user # TODO: исправить пользователя на бд где лежат
-    #         break
+    results = session.query(User).all()
 
     for some_user in results:
         if some_user.login == login and some_user.verify_password(password):
@@ -74,6 +70,9 @@ def protected_route(token: str = Depends(security)):
     login = verify_token(token)
     return {'message': f'Hello, {login}!'}
 
+async def main():
+    await uvicorn.run(app, host="127.0.0.1", port=8000, debug=True)
 
-# if __name__ == "main":
-#     uvicorn.run('main:app', host="127.0.0.1", reload=True, port=8000)
+
+if __name__ == "__main__":
+    main()
