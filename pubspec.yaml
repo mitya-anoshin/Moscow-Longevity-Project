@@ -21,7 +21,6 @@ dependencies:
   url_launcher: ^6.1.11
   magnifying_glass: ^1.0.4
   auto_route: ^7.2.0
-  freezed: ^2.3.4
   dio: ^5.1.2
   flutter_hooks: ^0.18.0
   hooks_riverpod: ^2.3.6
@@ -34,6 +33,8 @@ dev_dependencies:
     sdk: flutter
 
   lints: ^2.1.0
+  build_runner: ^2.1.4
+  auto_route_generator: ^7.1.1
 
 
 flutter:
