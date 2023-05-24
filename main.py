@@ -40,19 +40,20 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
 
 @app.get('/login')
 def login(login: str, password: str):
-    user = None
+    user_str = f'<User login={login!r}; password={password!r}>'
+    print(f'{user_str} tried to login!')
 
     for temp_user in session.query(User).all():
         if temp_user.login == login and temp_user.verify_password(password):
-            user = temp_user
-
-    if not user:
-        print(f'<User login={login!r}; password={password!r}> does not exist!')
+            break
+    else:
+        print(f'{user_str} does not exist in database')
         raise {'ok': False, 'message': 'Invalid login or password'}
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token({'sub': user.login}, access_token_expires)
+    access_token = create_access_token({'sub': login}, access_token_expires)
 
+    print(f'{user_str} successfully logged in')
     return {'ok': True, 'access_token': access_token, 'token_type': 'bearer'}
 
 
