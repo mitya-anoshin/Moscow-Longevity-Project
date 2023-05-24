@@ -1,6 +1,6 @@
 from tokens import create_access_token, verify_token, ACCESS_TOKEN_EXPIRE_MINUTES
-from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import HTTPBearer
+from fastapi import FastAPI, Depends
 from datetime import timedelta
 import gevent as gevent
 import uvicorn
@@ -16,6 +16,17 @@ security = HTTPBearer()
 
 @app.get('/register')
 def register(login: str, password: str, gender: str, born_at: int, street: str):
+    if not login:
+        return {'ok': False, 'message': 'Login field is empty'}
+    elif not password:
+        return {'ok': False, 'message': 'Password field is empty'}
+    elif not gender:
+        return {'ok': False, 'message': 'Gender field is empty'}
+    elif not born_at:
+        return {'ok': False, 'message': 'Born_at field is empty'}
+    elif not street:
+        return {'ok': False, 'message': 'Street field is empty'}
+
     user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
 
     if user in session.query(User).all():
@@ -40,6 +51,11 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
 
 @app.get('/login')
 def login(login: str, password: str):
+    if not login:
+        return {'ok': False, 'message': 'Login field is empty'}
+    elif not password:
+        return {'ok': False, 'message': 'Password field is empty'}
+
     user_str = f'<User login={login!r}; password={password!r}>'
     print(f'{user_str} tried to login!')
 
@@ -60,7 +76,7 @@ def login(login: str, password: str):
 @app.get('/protected')
 def protected_route(token: str = Depends(security)):
     login = verify_token(token)
-    return {'message': f'Hello, {login}!'}
+    return {'ok': True, 'message': f'Hello, {login}!'}
 
 
 if __name__ == '__main__':
