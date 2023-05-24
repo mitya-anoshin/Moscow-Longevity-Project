@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../utils/constants.dart';
 import '../../../widgets/app_button.dart';
+import '../../services/hive_service.dart';
 import '../manager.dart';
 
 class EmailLoginPage extends ConsumerStatefulWidget {
@@ -18,6 +19,7 @@ class _EmailLoginPageState extends ConsumerState<EmailLoginPage> {
   Widget getWidgetByAuthState(
     AuthController authController,
     AuthState authState,
+    HiveService hiveService,
   ) {
     if (authState is AuthStateLoading) {
       return Center(
@@ -29,15 +31,40 @@ class _EmailLoginPageState extends ConsumerState<EmailLoginPage> {
         passwordController: _passwordController,
         authController: authController,
       );
+    } else if (authState is AuthStateLoaded) {
+      hiveService.getToken().then((value) => print(value!.accessToken));
+      return Center(
+        child: Text(
+          'Вы вошли успешно!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Color.fromRGBO(0, 0, 0, 1),
+            fontWeight: FontWeight.bold,
+            fontSize: 50.sp,
+          ),
+        ),
+      );
     }
 
-    return Text('Error...');
+    return Center(
+      child: Text(
+        'Пожалуйста, попробуйте еще раз!',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Color.fromRGBO(0, 0, 0, 1),
+          fontWeight: FontWeight.bold,
+          fontSize: 50.sp,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final authController = ref.watch(authControllerProvider.notifier);
     final authState = ref.watch(authControllerProvider);
+
+    final hiveService = ref.watch(hiveServiceProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +74,7 @@ class _EmailLoginPageState extends ConsumerState<EmailLoginPage> {
       backgroundColor: Constants.primaryColor,
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: getWidgetByAuthState(authController, authState),
+        child: getWidgetByAuthState(authController, authState, hiveService),
       ),
     );
   }
