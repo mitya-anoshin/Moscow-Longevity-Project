@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../utils/constants.dart';
 import '../../../widgets/app_button.dart';
+import '../manager.dart';
 
-/// EmailLoginPage widget
-class EmailLoginPage extends StatelessWidget {
+class EmailLoginPage extends ConsumerWidget {
+  final _loginController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authRepository = ref.watch(authRepositoryProvider);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -20,6 +26,7 @@ class EmailLoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
+              controller: _loginController,
               decoration: InputDecoration(
                 labelStyle: TextStyle(
                   color: Colors.black,
@@ -41,6 +48,7 @@ class EmailLoginPage extends StatelessWidget {
             ),
             SizedBox(height: 70.h),
             TextFormField(
+              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelStyle: TextStyle(
@@ -66,7 +74,10 @@ class EmailLoginPage extends StatelessWidget {
               text: "Далее",
               type: ButtonType.plain,
               onPressed: () {
-                // nextScreen(context, "/login");
+                authRepository.login(
+                  _loginController.text,
+                  _passwordController.text,
+                );
               },
             ),
             SizedBox(height: 30.h),

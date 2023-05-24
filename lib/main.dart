@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'features/login_page/pages/choose_login.dart';
 import 'features/login_page/pages/code_confirmation_page.dart';
@@ -10,7 +11,7 @@ import 'features/welcome_page/welcome_page.dart';
 import 'utils/constants.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 /// MyApp Widget
