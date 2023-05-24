@@ -41,10 +41,8 @@ def login(login: str, password: str):
     for some_user in results:
         if some_user.login == login and some_user.verify_password(password):
             user = some_user
-            break
-
-    if not user:
-        raise HTTPException(status_code=401, detail='Invalid login or password')
+        else:
+            raise HTTPException(status_code=401, detail='Invalid login or password')
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token({'sub': user.login}, access_token_expires)
