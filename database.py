@@ -6,4 +6,4 @@ engine = create_engine('postgresql://postgres:user@localhost:5432/pension', echo
 
 Base = declarative_base()
 
-SessionLocal = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine)

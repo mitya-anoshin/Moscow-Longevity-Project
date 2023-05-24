@@ -1,9 +1,9 @@
-from database import SessionLocal
+from database import Session
 from models import User
 
 
 user = User('admin', '1234', 'male', 12345678, 'moscow')
-session = SessionLocal()
+session = Session()
 session.add(user)
 session.commit()
 

@@ -1,48 +1,50 @@
-from tokens import create_access_token, verify_token
+from tokens import create_access_token, verify_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from fastapi import FastAPI, Depends, HTTPException
-from tokens import ACCESS_TOKEN_EXPIRE_MINUTES
 from fastapi.security import HTTPBearer
-from database import SessionLocal
 from datetime import timedelta
-from models import User
+import gevent as gevent
 import uvicorn
+
+from database import Session
+from models import User
 
 
 app = FastAPI()
+session = Session()
 security = HTTPBearer()
 
 
-# Create instance
-# class User(BaseModel):
-#     id: UUID
-#     registered_at: strF
-#     login: str
-#     password: str
-#     gender: str
-#     born_at: date
-#     street: str
-session = SessionLocal()
-
-
-@app.post('/register')
+@app.get('/register')
 def register(login: str, password: str, gender: str, born_at: int, street: str):
     user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
-    session.add(user)
-    session.commit()
 
-    return {'message': 'User registered successfully'}
+    try:
+        session.add(user)
+        session.commit()
+    except gevent.Timeout:
+        session.invalidate()
+        print(f'Request timeout: <User {login} {password}>')
+        return {'ok': False, 'message': 'Request timeout'}
+    except Exception as exception:
+        session.rollback()
+        print(f'Exception occurred: {exception}')
+        return {'ok': False, 'message': 'Unexpected error'}
+
+    return {'ok': True, 'message': 'User registered successfully'}
 
 
-@app.post('/login')
+@app.get('/login')
 def login(login: str, password: str):
 
-    results = session.query(User).all()
+    results = session.query(User).all().filter(User.login == login and User.verify_password(password))
+    print(results, list(results))
 
     for some_user in results:
         if some_user.login == login and some_user.verify_password(password):
             user = some_user
-        else:
-            raise HTTPException(status_code=401, detail='Invalid login or password')
+
+    if not user:
+        raise HTTPException(status_code=401, detail='Invalid login or password')
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token({'sub': user.login}, access_token_expires)
