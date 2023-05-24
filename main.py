@@ -63,13 +63,13 @@ def login(login: str, password: str):
         if temp_user.login == login and temp_user.verify_password(password):
             break
     else:
-        print(f'{user_str} does not exist in database')
+        print(f'{user_str} does not exist in database!')
         return {'ok': False, 'message': 'Invalid login or password'}
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token({'sub': login}, access_token_expires)
 
-    print(f'{user_str} successfully logged in')
+    print(f'{user_str} logged in successfully!')
     return {'ok': True, 'access_token': access_token, 'token_type': 'bearer'}
 
 
