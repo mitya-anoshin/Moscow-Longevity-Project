@@ -56,9 +56,5 @@ def protected_route(token: str = Depends(security)):
     return {'message': f'Hello, {login}!'}
 
 
-# async def main():
-#     await uvicorn.run(app, host='127.0.0.1', port=8000)
-#
-#
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0', port=80)
