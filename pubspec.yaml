@@ -26,6 +26,7 @@ dependencies:
   flutter_hooks: ^0.18.0
   hooks_riverpod: ^2.3.6
   talker_dio_logger: ^1.0.2
+  hive: ^2.2.3
 
 dev_dependencies:
   flutter_test:
