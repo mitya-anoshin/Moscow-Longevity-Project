@@ -48,7 +48,7 @@ def login(login: str, password: str):
             break
     else:
         print(f'{user_str} does not exist in database')
-        raise {'ok': False, 'message': 'Invalid login or password'}
+        return {'ok': False, 'message': 'Invalid login or password'}
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token({'sub': login}, access_token_expires)
