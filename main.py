@@ -18,38 +18,42 @@ security = HTTPBearer()
 def register(login: str, password: str, gender: str, born_at: int, street: str):
     user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
 
+    if user in session.query(User).all():
+        print(f'User is already registered: {user}')
+        return {'ok': False, 'message': 'User is already registered'}
+
     try:
         session.add(user)
         session.commit()
     except gevent.Timeout:
         session.invalidate()
-        print(f'Request timeout: <User {login} {password}>')
+        print(f'Request timeout: {user}')
         return {'ok': False, 'message': 'Request timeout'}
     except Exception as exception:
         session.rollback()
-        print(f'Exception occurred: {exception}')
+        print(f'Request raised exception: {user} {exception}')
         return {'ok': False, 'message': 'Unexpected error'}
 
+    print(f'User registered successfully {user}')
     return {'ok': True, 'message': 'User registered successfully'}
 
 
 @app.get('/login')
 def login(login: str, password: str):
+    user = None
 
-    results = session.query(User).all().filter(User.login == login and User.verify_password(password))
-    print(results, list(results))
-
-    for some_user in results:
-        if some_user.login == login and some_user.verify_password(password):
-            user = some_user
+    for temp_user in session.query(User).all():
+        if temp_user.login == login and temp_user.verify_password(password):
+            user = temp_user
 
     if not user:
-        raise HTTPException(status_code=401, detail='Invalid login or password')
+        print(f'<User login={login!r}; password={password!r}> does not exist!')
+        raise {'ok': False, 'message': 'Invalid login or password'}
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token({'sub': user.login}, access_token_expires)
 
-    return {'access_token': access_token, 'token_type': 'bearer'}
+    return {'ok': True, 'access_token': access_token, 'token_type': 'bearer'}
 
 
 @app.get('/protected')

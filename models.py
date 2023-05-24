@@ -50,6 +50,9 @@ class User(Base):
             'login': self.login
         }
 
+    def __str__(self):
+        return f'<User login={self.login!r}; hashed_password={self.hashed_password!r}; gender={self.gender!r}; born_at={self.born_at!r}; street={self.street!r}>'
+
 
 class Group(Base):
     __tablename__ = 'groups'
