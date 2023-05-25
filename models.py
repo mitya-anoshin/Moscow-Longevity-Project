@@ -1,9 +1,8 @@
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, ForeignKey
 from passlib.context import CryptContext
 from datetime import datetime
 from database import Base
 import uuid
-
 
 # Crypto context for hashing
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
@@ -71,9 +70,10 @@ class Group(Base):
     close_schedule = Column(String, nullable=False)
     plan_schedule = Column(String, nullable=True)
 
-    # user_id = Column(String, ForeignKey("user.id"))
+    user_id = Column(String, ForeignKey("user.id"))
 
-    def __init__(self, direction_1: str, direction_2: str, direction_3: str, event_address: str, big_district: str, small_district: str, open_schedule: str, close_schedule: str):
+    def __init__(self, direction_1: str, direction_2: str, direction_3: str, event_address: str, big_district: str,
+                 small_district: str, open_schedule: str, close_schedule: str):
         self.direction_1 = direction_1
         self.direction_2 = direction_2
         self.direction_3 = direction_3
@@ -96,4 +96,21 @@ class Group(Base):
             'close_schedule': self.close_schedule,
             'plan_schedule': self.plan_schedule,
             'user_id': self.user_id,
+        }
+
+
+class CheckUserCode:
+    __tablename__ = 'groups'
+    id = Column(Integer, primary_key=True)
+    users_id = Column(String, ForeignKey("users.id"))
+    code = Column(Integer, nullable=False)
+
+    def __init__(self, users_id: str, code: int):
+        self.users_id = users_id,
+        self.code = code
+
+    def dict(self):
+        return {
+            'user_id': self.users_id,
+            'code': self.code
         }

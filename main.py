@@ -1,12 +1,18 @@
 from tokens import create_access_token, verify_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from fastapi_mail import FastMail, Message
 from fastapi.security import HTTPBearer
 from fastapi import FastAPI, Depends
 from datetime import timedelta
 import gevent as gevent
 import uvicorn
 
+
 from database import Session
 from models import User
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
 
 
 app = FastAPI()
