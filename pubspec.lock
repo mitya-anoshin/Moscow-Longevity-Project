@@ -168,6 +168,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  magnifying_glass:
+    dependency: "direct main"
+    description:
+      name: magnifying_glass
+      sha256: "25335438028394c4850052718c4eafc0933e7e3c6bb1d7bdc4f2000a1618cce3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   matcher:
     dependency: transitive
     description:

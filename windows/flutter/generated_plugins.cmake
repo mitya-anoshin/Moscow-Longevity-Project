@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  magnifying_glass
   url_launcher_windows
 )
 
