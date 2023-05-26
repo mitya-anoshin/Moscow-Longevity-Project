@@ -3,7 +3,6 @@ from random import choices
 import smtplib
 import string
 
-
 USERNAME = 'muhtararmagedonovich@yandex.com'
 PASSWORD = 'ivflmtkkyxyaeqqs'
 
@@ -13,7 +12,7 @@ def generate_confirmation_code(alpha: str = string.digits) -> str:
 
 
 def send_confirmation_code(email, code):
-    message = MIMEText(f'Текст вашего сообщения: {code}')
+    message = MIMEText(f'Ваш код подтверждения: {code}')
     message['From'] = USERNAME
     message['To'] = email
 
@@ -21,3 +20,9 @@ def send_confirmation_code(email, code):
     server.login(USERNAME, PASSWORD)
     server.send_message(message)
     server.quit()
+
+
+codus = generate_confirmation_code()
+print(codus)
+send_confirmation_code('tempolate@mail.ru', codus) #TODO: найти ебучего sms провайдера если мы его конечно будем делать.
+# TODO: основная задача, сделать модель объединяющая код и юзера, чтобы можно было сверить.
