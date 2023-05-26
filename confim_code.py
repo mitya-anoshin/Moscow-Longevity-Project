@@ -21,8 +21,3 @@ def send_confirmation_code(email, code):
     server.send_message(message)
     server.quit()
 
-
-codus = generate_confirmation_code()
-print(codus)
-send_confirmation_code('tempolate@mail.ru', codus) #TODO: найти ебучего sms провайдера если мы его конечно будем делать.
-# TODO: основная задача, сделать модель объединяющая код и юзера, чтобы можно было сверить.

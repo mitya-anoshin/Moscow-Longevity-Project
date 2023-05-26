@@ -32,12 +32,13 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
     elif not street:
         return {'ok': False, 'message': 'Street field is empty'}
 
+    user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
+    
     if user in session.query(User).all():
         print(f'User is already registered: {user}')
         return {'ok': False, 'message': 'User is already registered'}
 
     try:
-        user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
         session.add(user)
         session.commit()
         # write code into db and send it to mail
