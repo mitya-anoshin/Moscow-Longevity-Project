@@ -32,6 +32,10 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
     elif not street:
         return {'ok': False, 'message': 'Street field is empty'}
 
+    if user in session.query(User).all():
+        print(f'User is already registered: {user}')
+        return {'ok': False, 'message': 'User is already registered'}
+
     try:
         user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
         session.add(user)
@@ -80,13 +84,6 @@ def login(login: str, password: str):
     return {'ok': True, 'access_token': access_token, 'token_type': 'bearer'}
 
 
-@app.get('/confirming_code')
-def confirming_code(login: str, code: str, user_id: str):
-    for temp_code in session.query(Code).all():
-        if temp_code.user_id == login and temp_code.verify_password(password):
-            break
-
-
 @app.post("/verify-email")
 def verify_email(code: str, user_id: str):
     user_code = f'<User code={code!r}>'
@@ -95,10 +92,10 @@ def verify_email(code: str, user_id: str):
         if temp_code.code == code and temp_code.user_id == user_id:
             break
     else:
-        print(f'{user_code} does not exist in database!')
-        return {'ok': False, 'message': 'Invalid login or password'}
+        print(f'{user_id} entered incorrect code!')
+        return {'ok': False, 'message': 'Invalid code'}
 
-    return {"message": "Ваш код успешно подтвержден"}
+    return {'ok': True, "message": "Ваш код успешно подтвержден"}
 
 
 @app.get('/protected')

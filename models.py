@@ -51,7 +51,7 @@ class User(Base):
         }
 
     def __str__(self):
-        return f'<User login={self.login!r}; hashed_password={self.hashed_password!r}; gender={self.gender!r}; born_at={self.born_at!r}; street={self.street!r}>'
+        return f'<User login={self.login!r}; hashed_password={self.hashed_password!r}; id={self.id!r}>'
 
 
 class Group(Base):
