@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, DateTime
 from passlib.context import CryptContext
+from confim_code import generate_confirmation_code
 from datetime import datetime
 from database import Base
 import uuid
@@ -99,13 +100,14 @@ class Group(Base):
 
 class Code(Base):
     __tablename__ = 'codes'
-    users_id = Column(String, ForeignKey("users.id"), primary_key=True)
-    code = Column(String, nullable=False)
-    expires_at = Column(DateTime)
+    user_id = Column(String, ForeignKey("users.id"), primary_key=True)
+    code = Column(String, nullable=False, default=generate_confirmation_code)
+
+    def __init__(self, user_id: str):
+        self.user_id = user_id
 
     def dict(self):
         return {
-            'user_id': self.users_id,
-            'code': self.code,
-            'expires_at': self.expires_at,
+            'user_id': self.user_id,
+            'code': self.code
         }

@@ -4,7 +4,7 @@ import smtplib
 import string
 
 USERNAME = 'muhtararmagedonovich@yandex.com'
-PASSWORD = 'ivflmtkkyxyaeqqs'
+PASSWORD = 'fjwxrztqchiziffp'
 
 
 def generate_confirmation_code(alpha: str = string.digits) -> str:

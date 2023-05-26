@@ -7,7 +7,6 @@ from datetime import timedelta
 import gevent as gevent
 import uvicorn
 
-
 from database import Session
 from models import User, Code
 
@@ -15,11 +14,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
 
-
 app = FastAPI()
 session = Session()
 security = HTTPBearer()
-
 
 
 @app.get('/register')
@@ -35,16 +32,15 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
     elif not street:
         return {'ok': False, 'message': 'Street field is empty'}
 
-    user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
-    code = generate_confirmation_code()
-
     try:
+        user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
         session.add(user)
         session.commit()
         # write code into db and send it to mail
+        code = Code(user_id=user.id)
         session.add(code)
         session.commit()
-        send_confirmation_code(login, code)
+        send_confirmation_code(login, code.code)
     except gevent.Timeout:
         session.invalidate()
         print(f'Request timeout: {user}')
@@ -52,6 +48,8 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
     except Exception as exception:
         session.rollback()
         print(f'Request raised exception: {user} {exception}')
+        raise exception
+
         return {'ok': False, 'message': 'Unexpected error'}
 
     print(f'User registered successfully {user}')
@@ -88,9 +86,9 @@ def confirming_code(login: str, code: str, user_id: str):
         if temp_code.user_id == login and temp_code.verify_password(password):
             break
 
+
 @app.post("/verify-email")
 def verify_email(code: str, user_id: str):
-
     user_code = f'<User code={code!r}>'
 
     for temp_code in session.query(Code).all():
@@ -100,8 +98,8 @@ def verify_email(code: str, user_id: str):
         print(f'{user_code} does not exist in database!')
         return {'ok': False, 'message': 'Invalid login or password'}
 
-
     return {"message": "Ваш код успешно подтвержден"}
+
 
 @app.get('/protected')
 def protected_route(token: str = Depends(security)):
