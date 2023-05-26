@@ -1,5 +1,6 @@
 from tokens import create_access_token, verify_token, ACCESS_TOKEN_EXPIRE_MINUTES
-from fastapi_mail import FastMail, Message
+from confim_code import generate_confirmation_code, send_confirmation_code
+from datetime import datetime, timedelta
 from fastapi.security import HTTPBearer
 from fastapi import FastAPI, Depends
 from datetime import timedelta
@@ -8,7 +9,7 @@ import uvicorn
 
 
 from database import Session
-from models import User
+from models import User, Code
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -18,6 +19,7 @@ import smtplib
 app = FastAPI()
 session = Session()
 security = HTTPBearer()
+
 
 
 @app.get('/register')
@@ -34,14 +36,15 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
         return {'ok': False, 'message': 'Street field is empty'}
 
     user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
-
-    if user in session.query(User).all():
-        print(f'User is already registered: {user}')
-        return {'ok': False, 'message': 'User is already registered'}
+    code = generate_confirmation_code()
 
     try:
         session.add(user)
         session.commit()
+        # write code into db and send it to mail
+        session.add(code)
+        session.commit()
+        send_confirmation_code(login, code)
     except gevent.Timeout:
         session.invalidate()
         print(f'Request timeout: {user}')
@@ -78,6 +81,27 @@ def login(login: str, password: str):
     print(f'{user_str} logged in successfully!')
     return {'ok': True, 'access_token': access_token, 'token_type': 'bearer'}
 
+
+@app.get('/confirming_code')
+def confirming_code(login: str, code: str, user_id: str):
+    for temp_code in session.query(Code).all():
+        if temp_code.user_id == login and temp_code.verify_password(password):
+            break
+
+@app.post("/verify-email")
+def verify_email(code: str, user_id: str):
+
+    user_code = f'<User code={code!r}>'
+
+    for temp_code in session.query(Code).all():
+        if temp_code.code == code and temp_code.user_id == user_id:
+            break
+    else:
+        print(f'{user_code} does not exist in database!')
+        return {'ok': False, 'message': 'Invalid login or password'}
+
+
+    return {"message": "Ваш код успешно подтвержден"}
 
 @app.get('/protected')
 def protected_route(token: str = Depends(security)):

@@ -1,7 +1,7 @@
 from database import Base, engine
 
 # Do not fucking touch, shit does not work without it :)
-from models import User
+from models import *
 
 
 print('Create database....')
