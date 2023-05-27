@@ -3,7 +3,7 @@ import json
 
 
 def load_events():
-    with open('output.json', 'r', encoding='utf-8') as file:
+    with open('dump.json', 'r', encoding='utf-8') as file:
         json_data = file.read()
         events = json.loads(json_data)
     return events

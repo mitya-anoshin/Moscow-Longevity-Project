@@ -5,8 +5,10 @@ from events import load_events, get_random_events
 from fastapi.security import HTTPBearer
 from fastapi import FastAPI, Depends
 from datetime import timedelta
+from filters import check_if_contains_strings
 import gevent as gevent
 import uvicorn
+import json
 import re
 
 from database import Session
@@ -107,7 +109,6 @@ def verify_email(code: str, user_id: str):
     else:
         print(f'{user_str} entered incorrect code or user_id!')
         return {'ok': False, 'message': 'Invalid code or user_id'}
-      
 
     print(f'{user_id} verify in successfully!')
     return {'ok': True, "message": "Your code was successfully verified"}
@@ -128,12 +129,22 @@ def search(direction: str = None):
             results.append(event)
     return results
 
+    # if len(strings) > 0:
+    #     for event in events:
+    #         if event['расписание в активных периодах']:
+    #             for info in event['расписание в активных периодах']:
+    #                 days = info['days']
+    #                 substring = check_if_contains_strings(info['days'], strings)
+    #                 break
+    # return substring # TODO: потуги сделать хоть что-то для фильтрации
+
 
 @app.get('/events')
 def get_events():
     events = load_events()
     random_events = get_random_events(events)
     return random_events
+
 
 @app.get('/protected')
 def protected_route(token: str = Depends(security)):
