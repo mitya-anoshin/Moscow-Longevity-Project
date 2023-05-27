@@ -57,8 +57,13 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
 
         return {'ok': False, 'message': 'Unexpected error'}
 
+    column_value_id = getattr(User, 'id')
+
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token({'sub': login}, access_token_expires)
+
     print(f'User registered successfully {user}')
-    return {'ok': True, 'message': 'User registered successfully'}
+    return {'ok': True,'id': column_value_id, 'access_token': access_token, 'message': 'User registered successfully'}
 
 
 @app.get('/login')
@@ -87,16 +92,23 @@ def login(login: str, password: str):
 
 @app.post("/verify-email")
 def verify_email(code: str, user_id: str):
-    user_code = f'<User code={code!r}>'
+    if not code:
+        return {'ok': False, 'message': 'code field is empty'}
+    elif not user_id:
+        return {'ok': False, 'message': 'user_id field is empty'}
+
+    user_str = f'<User code={code!r}; user_id={user_id!r}>'
 
     for temp_code in session.query(Code).all():
         if temp_code.code == code and temp_code.user_id == user_id:
             break
     else:
-        print(f'{user_id} entered incorrect code!')
-        return {'ok': False, 'message': 'Invalid code'}
+        print(f'{user_str} entered incorrect code or user_id!')
+        return {'ok': False, 'message': 'Invalid code or user_id'}
 
-    return {'ok': True, "message": "Ваш код успешно подтвержден"}
+
+    print(f'{user_id} verify in successfully!')
+    return {'ok': True, "message": "Your code was successfully verified"}
 
 
 @app.get('/protected')
