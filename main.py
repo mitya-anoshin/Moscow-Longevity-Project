@@ -105,6 +105,7 @@ def verify_email(code: str, user_id: str):
     else:
         print(f'{user_str} entered incorrect code or user_id!')
         return {'ok': False, 'message': 'Invalid code or user_id'}
+      
 
     print(f'{user_id} verify in successfully!')
     return {'ok': True, "message": "Your code was successfully verified"}
