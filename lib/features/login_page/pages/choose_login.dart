@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,6 +8,7 @@ import '../../../utils/helper.dart';
 import '../../../widgets/app_button.dart';
 
 /// ChooseLoginPage widget
+@RoutePage()
 class ChooseLoginPage extends StatelessWidget {
   _launchURL() async {
     final url = Uri.parse('https://www.mos.ru');
@@ -38,7 +40,7 @@ class ChooseLoginPage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pop();
+                        context.router.pop();
                       },
                       child: Icon(
                         Icons.arrow_back,

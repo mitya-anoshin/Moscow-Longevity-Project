@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -7,6 +8,8 @@ import '../../../widgets/app_button.dart';
 import '../../services/hive_service.dart';
 import '../manager.dart';
 
+/// Email Login Page
+@RoutePage()
 class EmailLoginPage extends ConsumerStatefulWidget {
   @override
   ConsumerState<EmailLoginPage> createState() => _EmailLoginPageState();
@@ -73,14 +76,16 @@ class _EmailLoginPageState extends ConsumerState<EmailLoginPage> {
       ),
       backgroundColor: Constants.primaryColor,
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20.w),
         child: getWidgetByAuthState(authController, authState, hiveService),
       ),
     );
   }
 }
 
+/// Login Fields
 class LoginFields extends StatelessWidget {
+  /// Login Fields constructor
   const LoginFields({
     super.key,
     required TextEditingController loginController,

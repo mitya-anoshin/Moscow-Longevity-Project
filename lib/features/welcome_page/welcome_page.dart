@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnifying_glass/magnifying_glass.dart';
@@ -7,6 +8,7 @@ import '../../utils/helper.dart';
 import '../../widgets/app_button.dart';
 
 /// WelcomePage Widget
+@RoutePage()
 class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -82,8 +84,8 @@ class WelcomePage extends StatelessWidget {
                         text: "Да",
                         type: ButtonType.plain,
                         onPressed: () {
-                          magnifyingGlassController.openGlass();
-                          // nextScreen(context, "/login");
+                          // magnifyingGlassController.openGlass();
+                          nextScreen(context, "/registration");
                         },
                       ),
                       SizedBox(

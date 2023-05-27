@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
+import 'features/routes/app_router.dart';
 import 'utils/constants.dart';
 
 void main() async {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       designSize: Size(375, 812),
       builder: (context, child) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title: "Flutter Laundry UI",
+        title: "Flutter Moscow Longitude",
         theme: ThemeData(
           scaffoldBackgroundColor: Constants.scaffoldBackgroundColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
