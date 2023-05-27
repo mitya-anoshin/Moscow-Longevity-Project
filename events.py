@@ -9,6 +9,6 @@ def load_events():
     return events
 
 
-def get_random_events(events, num_events=20):
+def get_random_events(events, num_events=25):
     random_events = random.sample(events, num_events)
     return random_events
