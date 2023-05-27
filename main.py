@@ -33,7 +33,7 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
         return {'ok': False, 'message': 'Street field is empty'}
 
     user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
-    
+
     if user in session.query(User).all():
         print(f'User is already registered: {user}')
         return {'ok': False, 'message': 'User is already registered'}
@@ -57,13 +57,13 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
 
         return {'ok': False, 'message': 'Unexpected error'}
 
-    column_value_id = getattr(User, 'id')
-
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token({'sub': login}, access_token_expires)
+    # column_value_id = getattr(User, 'id')
+    #
+    # access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    # access_token = create_access_token({'sub': login}, access_token_expires)
 
     print(f'User registered successfully {user}')
-    return {'ok': True,'id': column_value_id, 'access_token': access_token, 'message': 'User registered successfully'}
+    return {'ok': True, 'message': 'User registered successfully'}
 
 
 @app.get('/login')
@@ -105,7 +105,6 @@ def verify_email(code: str, user_id: str):
     else:
         print(f'{user_str} entered incorrect code or user_id!')
         return {'ok': False, 'message': 'Invalid code or user_id'}
-
 
     print(f'{user_id} verify in successfully!')
     return {'ok': True, "message": "Your code was successfully verified"}
