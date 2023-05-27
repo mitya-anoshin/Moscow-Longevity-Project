@@ -7,6 +7,7 @@ from fastapi import FastAPI, Depends
 from datetime import timedelta
 import gevent as gevent
 import uvicorn
+import re
 
 from database import Session
 from models import User, Code
@@ -35,7 +36,7 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
 
     user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
 
-    if user in session.query(User).all():
+    if user in session.direction(User).all():
         print(f'User is already registered: {user}')
         return {'ok': False, 'message': 'User is already registered'}
 
@@ -77,7 +78,7 @@ def login(login: str, password: str):
     user_str = f'<User login={login!r}; password={password!r}>'
     print(f'{user_str} tried to login!')
 
-    for temp_user in session.query(User).all():
+    for temp_user in session.direction(User).all():
         if temp_user.login == login and temp_user.verify_password(password):
             break
     else:
@@ -100,7 +101,7 @@ def verify_email(code: str, user_id: str):
 
     user_str = f'<User code={code!r}; user_id={user_id!r}>'
 
-    for temp_code in session.query(Code).all():
+    for temp_code in session.direction(Code).all():
         if temp_code.code == code and temp_code.user_id == user_id:
             break
     else:
@@ -116,16 +117,16 @@ def verify_email(code: str, user_id: str):
 def search(direction: str = None):
     results = []
     events = load_events()
-
-    for record in events:
+    direction = direction.lower()
+    regex = re.compile(re.escape(direction))
+    for event in events:
         if (
-                (not direction or record['направление 1'] == direction) or
-                (not direction or record['направление 2'] == direction) or
-                (not direction or record['направление 3'] == direction)
+                regex.search(event['направление 1'].lower()) or
+                regex.search(event['направление 2'].lower()) or
+                regex.search(event['направление 3'].lower())
         ):
-            results.append(record)
-
-    return {"results": results}
+            results.append(event)
+    return results
 
 
 @app.get('/events')
