@@ -1,6 +1,7 @@
 from tokens import create_access_token, verify_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from confim_code import generate_confirmation_code, send_confirmation_code
 from datetime import datetime, timedelta
+from events import load_events, get_random_events
 from fastapi.security import HTTPBearer
 from fastapi import FastAPI, Depends
 from datetime import timedelta
@@ -111,6 +112,28 @@ def verify_email(code: str, user_id: str):
     return {'ok': True, "message": "Your code was successfully verified"}
 
 
+@app.get("/search/")
+def search(direction: str = None):
+    results = []
+    events = load_events()
+
+    for record in events:
+        if (
+                (not direction or record['направление 1'] == direction) or
+                (not direction or record['направление 2'] == direction) or
+                (not direction or record['направление 3'] == direction)
+        ):
+            results.append(record)
+
+    return {"results": results}
+
+
+@app.get('/events')
+def get_events():
+    events = load_events()
+    random_events = get_random_events(events)
+    return random_events
+
 @app.get('/protected')
 def protected_route(token: str = Depends(security)):
     login = verify_token(token)
@@ -118,4 +141,4 @@ def protected_route(token: str = Depends(security)):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=80)
+    uvicorn.run(app, host='0.0.0.0', port=8000)
