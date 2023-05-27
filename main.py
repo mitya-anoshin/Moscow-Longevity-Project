@@ -38,7 +38,7 @@ def register(login: str, password: str, gender: str, born_at: int, street: str):
 
     user = User(login=login, password=password, gender=gender, born_at=born_at, street=street)
 
-    if user in session.direction(User).all():
+    if user in session.query(User).all():
         print(f'User is already registered: {user}')
         return {'ok': False, 'message': 'User is already registered'}
 
@@ -80,7 +80,7 @@ def login(login: str, password: str):
     user_str = f'<User login={login!r}; password={password!r}>'
     print(f'{user_str} tried to login!')
 
-    for temp_user in session.direction(User).all():
+    for temp_user in session.query(User).all():
         if temp_user.login == login and temp_user.verify_password(password):
             break
     else:
@@ -103,7 +103,7 @@ def verify_email(code: str, user_id: str):
 
     user_str = f'<User code={code!r}; user_id={user_id!r}>'
 
-    for temp_code in session.direction(Code).all():
+    for temp_code in session.query(Code).all():
         if temp_code.code == code and temp_code.user_id == user_id:
             break
     else:
