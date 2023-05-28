@@ -69,6 +69,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const InfoEventPage(),
       );
     },
+    SearchRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SearchPage(),
+      );
+    },
+    SurveyRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SurveyPage(),
+      );
+    },
   };
 }
 
@@ -194,6 +206,34 @@ class InfoEventRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'InfoEventRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SearchPage]
+class SearchRoute extends PageRouteInfo<void> {
+  const SearchRoute({List<PageRouteInfo>? children})
+      : super(
+          SearchRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SearchRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SurveyPage]
+class SurveyRoute extends PageRouteInfo<void> {
+  const SurveyRoute({List<PageRouteInfo>? children})
+      : super(
+          SurveyRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SurveyRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

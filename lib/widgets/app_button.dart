@@ -37,7 +37,7 @@ class AppButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: double.infinity,
-        height: 60.h,
+        height: 80.h,
         decoration: BoxDecoration(
           color: getButtonColor(type),
           borderRadius: BorderRadius.circular(8.0),
@@ -53,6 +53,7 @@ class AppButton extends StatelessWidget {
         child: Center(
           child: Text(
             text,
+            textAlign: TextAlign.center,
             style: GoogleFonts.roboto(
               color: getTextColor(type),
               fontSize: 20.sp,

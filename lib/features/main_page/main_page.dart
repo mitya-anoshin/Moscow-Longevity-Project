@@ -62,12 +62,17 @@ class _MainPageState extends State<MainPage> {
           actions: [
             Padding(
               padding: EdgeInsets.only(right: 10.w),
-              child: Center(
-                child: Text(
-                  'Поиск',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                onTap: () {
+                  context.router.pushNamed('/search');
+                },
+                child: Center(
+                  child: Text(
+                    'Поиск',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
