@@ -4,6 +4,8 @@ import '../login_page/pages/choose_login.dart';
 import '../login_page/pages/code_confirmation_page.dart';
 import '../login_page/pages/email_login_page.dart';
 import '../login_page/pages/phone_login_page.dart';
+import '../main_page/main_page.dart';
+import '../main_page/pages/info_event_page.dart';
 import '../registration/pages/registration_info_page.dart';
 import '../registration/pages/registration_page.dart';
 import '../welcome_page/welcome_page.dart';
@@ -16,7 +18,9 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(page: WelcomeRoute.page, initial: true),
+        AutoRoute(page: MainRoute.page, initial: false),
         AutoRoute(page: ChooseLoginRoute.page, path: '/login'),
+        AutoRoute(page: InfoEventRoute.page, path: '/main/event'),
         AutoRoute(page: PhoneLoginRoute.page, path: '/login/phone'),
         AutoRoute(
             page: CodeConfirmationRoute.page,

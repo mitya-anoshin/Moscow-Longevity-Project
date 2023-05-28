@@ -45,16 +45,28 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WelcomePage(),
       );
     },
-    RegistrationRoute.name: (routeData) {
+    MainRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const RegistrationPage(),
+        child: const MainPage(),
       );
     },
     RegistrationInfoRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const RegistrationInfoPage(),
+      );
+    },
+    RegistrationRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const RegistrationPage(),
+      );
+    },
+    InfoEventRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const InfoEventPage(),
       );
     },
   };
@@ -131,15 +143,15 @@ class WelcomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [RegistrationPage]
-class RegistrationRoute extends PageRouteInfo<void> {
-  const RegistrationRoute({List<PageRouteInfo>? children})
+/// [MainPage]
+class MainRoute extends PageRouteInfo<void> {
+  const MainRoute({List<PageRouteInfo>? children})
       : super(
-          RegistrationRoute.name,
+          MainRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'RegistrationRoute';
+  static const String name = 'MainRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -154,6 +166,34 @@ class RegistrationInfoRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RegistrationInfoRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [RegistrationPage]
+class RegistrationRoute extends PageRouteInfo<void> {
+  const RegistrationRoute({List<PageRouteInfo>? children})
+      : super(
+          RegistrationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RegistrationRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [InfoEventPage]
+class InfoEventRoute extends PageRouteInfo<void> {
+  const InfoEventRoute({List<PageRouteInfo>? children})
+      : super(
+          InfoEventRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'InfoEventRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
